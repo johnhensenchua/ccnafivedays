@@ -314,7 +314,7 @@ int fa 0/0
 Unlock
 config t
 int fa 0/0
- no ip access-group 101 in
+ no ip access-group 103 in
 
 Ex2:  As a Security Consultant:
 Create a cisco Firewall policy with condition
@@ -348,7 +348,144 @@ int fa 0/0
  ip access-group 101 in
  do sh ip access-list 101
 
- 
+config t
+int fa 0/0
+ no ip access-group 102 in
+
+Ex4: Hacker = any, p1, p2, pc
+EditCisco:
+config t
+no ip host p1 10.32.100.102
+no ip host p2 10.32.100.101
+ip host p1 10.32.100.103
+ip host p2 10.32.100.104
+ip host c1 10.32.50.6
+ip host c2 10.32.50.8
+
+
+
+Create a firewall Policy to meet this condition:
+hacker: pc,1pc2,c1,c2
+- pc can http,https cm
+- p1 can ping can ping cm
+- p2 can sccp/cucm on cm
+- c1 can ping cm
+- c2 can http cm == 6 line
+
+access-list 103
+config t
+no access-list 103
+access-list 103 permit tcp host pc host cm eq 80
+access-list 103 permit tcp host pc host cm eq 443
+access-list 103 permit icmp host p1 host cm 
+access-list 103 permit tcp host p2 host cm eq 2000
+access-list 103 permit icmp host c1 host cm
+access-list 103 permit tcp host c2 host cm eq 80
+int fa 0/0
+ ip access-group 103 in
+ do sh ip access-list 103
+
+
+- pc can telnet,ssh cm
+- p1 can sccp/cucm on cm- 
+- p2 can ping cm
+- c1 can http cm
+- c2 can ping cm == Use, acl 105, with 6 line
+
+
+config t
+no access-list 104
+access-list 104 permit tcp host pc host cm eq 22
+access-list 104 permit tcp host pc host cm eq 23
+access-list 104 permit icmp host p2 host cm 
+access-list 104 permit tcp host p1 host cm eq 2000
+access-list 104 permit icmp host c2 host cm
+access-list 104 permit tcp host c1 host cm eq 80
+int fa 0/0
+ ip access-group 104 in
+ do sh ip access-list 104
+
+
+Task7: HOW TO MASTER THE 5 LABS IN EXAM
+ExamlabQuestion:
+1.dhcp question
+2, acl access list 
+3. ssh
+4 NTP
+5 NAT
+lab1: dhcpServer:
+config t
+int gi 2
+ip add 192.168.102.5 255.255.255.0
+no shut 
+config t
+int gi 3
+ip add 10.20.30.1 255.255.255.0
+no shut
+do copy run start (save)
+
+ExamlabQuestion
+LAB1
+Create a dhcp pool named BLDGDHCP
+With 10.20.30.0/24 as pool, and domain name of ccnaexam.com, dns server of 8.8.8.8 do not give, 1st 50 ip
+config t
+ip dhcp excluded-add 10.20.30.1 10.20.30.49
+ip dhcp pool BLDGDHCP
+network 10.20.30.0 255.255.255.0
+default-router 10.20.30.1
+domain-name ccnaexam.com
+dns-server 8.8.8.8
+option 150 ip 1.1.1.1
+
+LAB2: Enable SSH encryption on cisco:
+config t
+ip domain-name ccnaexam.com
+username boss privilage 15 secret pass
+crypto key generate rsa 
+ip ssh version 2
+
+
+LAB3: Network Time Protocol or NTP
+NTP Synchronizes time will all Cisco Devices
+Step : internet Connection
+config t
+int gi 1
+ip add dhcp
+no shut
+do ping 8.8.8.8
+
+
+ip domain-lookup 
+ip name-server 8.8.8.8
+do ping time.google.com
+ntp server time.google.com
+
+
+Lab4: danger lab: most important/lab hardest lab
+Network Address Translation
+3 steps to NAT:
+bldg1: 10.20.30.50 192.168.108.69 
+bldg1: 10.20.30.51 192.168.108.88
+NATinterface:
+gi1 = outsite/internetfacing
+gi3 = inside/NatInside
+
+config t
+access-list 8 permit 10.20.30.0 0.0.0.255
+int gi 1
+ip nat OUTSIDE
+int gi 3
+ip nat INSIDE
+!
+ip nat inside source static 10.20.30.50 192.168.108.69
+ip nat inside source static 10.20.30.51 192.168.108.88
+ip nat inside source list 8 int gi 1 overload
+
+
+
+
+
+
 
 
 
