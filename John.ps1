@@ -1,0 +1,1 @@
+﻿New-Website -name "HayupWeb" -HostHeader "www.fms.com" -PhysicalPath "D:\webs\callbiz" -Force

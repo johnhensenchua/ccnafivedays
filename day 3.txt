@@ -1,0 +1,23 @@
+p1:
+config T
+ip route 192.168.1.128  255.255.255.224 10.2.1.1 
+ip route 10.2.2.0  255.255.255.0 10.2.1.1 
+do sh ip route static
+
+p2:
+config T
+ip route 192.168.1.128  255.255.255.224 10.2.1.2 
+ip route 10.2.2.0  255.255.255.0 10.2.1.2 
+do sh ip route staticcon
+
+
+config t
+username admin password pass
+line vty 0 14
+login local
+
+
+encryp SwitchTraffic with ssh:
+config t
+ip domain-name rivanit.com
+crypto key generate rsa
