@@ -1,0 +1,836 @@
+shctrl+c = every create.
+
+10.m.1.10
+10.m.1.4m
+10.m.100.4
+10.m.100.8
+200.0.0.1
+10.m.m.1
+10.m.m.4
+200.0.0.k
+10.k.1.10
+10.k.100.8
+
+
+how  to implemente sa SubnetDesgin:
+Template:
+
+config t 
+vlan 25
+name pnp.gov.com
+int vlan 25
+ip add 10._._._ 255._._._
+ip dhcp excluded-add 10._._._ 10._._._
+ip dhcp pool _____.com
+Network 10._._._ 255._._._
+default-router 10._._._
+domain-name _____.com
+dns-server 10.32.1.10
+option 150 ip 10.32.100.8
+Int fa 0/5
+ swi acc vlan 25
+
+ex1
+config t 
+vlan 25
+name pnp.gov.com
+int vlan 25
+no shut
+ip add 10.0.1.1 255.255.255.0
+ip dhcp excluded-add 10.0.1.1 10.0.1.20
+ip dhcp pool pnp.gov.com
+Network 10.0.1.0 255.255.255.0
+default-router 10.0.1.1
+domain-name pnp.gov.com
+dns-server 10.32.1.10
+option 150 ip 10.32.100.8
+Int fa 0/5
+ swi acc vlan 25
+
+
+config t 
+vlan 25
+name pnp.gov.com
+int vlan 25
+no shut
+ip add 10.0.1.1 255.255.255.0
+ip dhcp excluded-add 10.0.1.1 10.0.1.20
+ip dhcp pool pnp.gov.com
+Network 10.0.1.0 255.255.255.0
+default-router 10.0.1.1
+domain-name pnp.gov.com
+dns-server 10.32.1.10
+option 150 ip 10.32.100.8
+Int fa 0/5
+ swi acc vlan 25
+
+
+ex4 Design/ Implement the biggest TELUS.COM USING
+
+10.0.0.8 with 4500 Call CallAgents
+
+
+
+
+Day 4
+VPN site to site
+
+
+VPN JP
+
+config t
+int gi 2
+ip add 192.168.102.10 255.255.255.0
+no shut
+
+VPN PH
+config t
+int gi 2
+ip add 192.168.102.20 255.255.255.0
+no shut
+
+
+
+@VPNJP
+config t
+no logging console
+no ip domain-lookup
+ip route 0.0.0.0 0.0.0.0 200.0.0.20
+int gi 1
+ip add 200.0.0.10 255.255.255.0
+no shut
+int gi 3
+ip add 10.10.10.1 255.255.255.0
+no shut
+
+
+
+
+@VPNoh
+config t
+no logging console
+no ip domain-lookup
+ip route 0.0.0.0 0.0.0.0 200.0.0.10
+int gi 1
+ip add 200.0.0.20 255.255.255.0
+no shut
+int gi 3
+ip add 10.20.20.1 255.255.255.0
+no shut
+
+
+route delete 0.0.0.0
+route print 
+route add 0.0.0.0 mask 0.0.0.0
+route add 10.0.0.0 mask 255.0.0.0 10.m.1.4
+route add 200.0.0.0 mask 255.255.255.0 10.m.1.4
+
+
+
+
+config t
+hostnmae EDGE-32
+no access-list 1
+access-list 1 permit 10.32.1.10 0.0.0.0
+access-list 1 permit 10.32.0.0 0.0.255.255
+line vty 0 14
+access-class 1 in
+
+
+config t
+no access-list 1
+access-list 1 permit 10.32.1.10 0.0.0.0
+access-list 1 permit 10.32.0.0 0.0.255.255
+line vty 0 14
+access-class 1 in
+
+
+
+Usage2: always block all the ip address the "gagong bansa"
+China,Nk,Russia
+
+How to block all the ip address of each country:
+
+
+ex.1 BLOCK ALL THE IP ADDRESS FROM THE OTHER TABLE:
+
+@EDGE:
+config t
+no access-list 2
+access-list 2 deny 10.11.0.0 0.0.255.255
+access-list 2 deny 10.21.0.0 0.0.255.255
+access-list 2 deny 10.31.0.0 0.0.255.255
+access-list 2 deny 10.41.0.0 0.0.255.255
+access-list 2 deny 10.51.0.0 0.0.255.255
+access-list 2 deny 10.61.0.0 0.0.255.255
+access-list 2 deny 10.71.0.0 0.0.255.255
+access-list 2 Permit Any
+Int Gi 0/0/1
+ip access-group 2 in
+
+
+Unlock
+config t
+Int Gi 0/0/1
+no ip access-group 4 in
+
+Lock
+config t
+no access-list 2
+
+
+____________________________________________
+config t
+no access-list 3
+access-list 3 deny 10.41.0.0 0.0.255.255
+access-list 3 deny 10.42.0.0 0.0.255.255
+access-list 3 deny 10.51.0.0 0.0.255.255
+access-list 3 deny 10.52.0.0 0.0.255.255
+access-list 3 deny 10.61.0.0 0.0.255.255
+access-list 3 deny 10.62.0.0 0.0.255.255
+access-list 3 deny 10.71.0.0 0.0.255.255
+access-list 3 Permit Any
+Int Gi 0/0/1
+ip access-group 3 in
+
+
+config t
+Int Gi 0/0/1
+no ip access-group 3 in
+
+
+
+
+_________________________________
+
+
+
+config t
+no access-list 4
+access-list 4 deny 10.11.0.0 0.0.255.255
+access-list 4 deny 10.12.0.0 0.0.255.255
+access-list 4 deny 10.61.0.0 0.0.255.255
+access-list 4 deny 10.62.0.0 0.0.255.255
+access-list 4 deny 10.71.0.0 0.0.255.255
+access-list 4 deny 10.22.0.0 0.0.255.255
+access-list 4 deny 10.21.0.0 0.0.255.255
+access-list 4 Permit Any
+Int Gi 0/0/1
+ip access-group 4 in
+
+
+
+ex 5 if many deny  use permit:
+config t
+no access-list 5
+access-list 5 Permit 10.31.0.0 0.0.255.255
+access-list 5 deny Any
+
+
+
+how to check:
+sh ip int gi 0/0/1
+sh ip access-list
+
+
+ex5: how to Block russia ip address 
+config t
+no IP access-list standard BLOCKRUSSIA
+IP access-list standard BLOCKRUSSIA
+deny 10.11.0.0 0.0.255.255
+deny 10.21.0.0 0.0.255.255
+deny 10.31.0.0 0.0.255.255
+deny 10.41.0.0 0.0.255.255
+deny 10.51.0.0 0.0.255.255
+deny 10.61.0.0 0.0.255.255
+deny 10.71.0.0 0.0.255.255
+permit Any
+int gi 0/0/1
+ip access-group BlOCKRUSSIA in
+do sh ip access-list BlOCKRUSSIA
+
+config t
+Int Gi 0/0/1
+no ip access-group BlOCKRUSSIA in
+
+
+
+TASK 5 FIREWALL FUNDAMENTALS / PENETRATION TESTING:
+
+
+Teams:
+READTEAM PenetrationTesting/VAPT:
+         kalilinux -> OSCP
+          
+
+
+BLUE TEAM: CyberSecurity Protection:
+           UTM:
+Task 6 Create Cisco Basic Firewall Policy
+how to make firewall policy:
+1.Protocol: tcp,udp,icmp, IP 
+2.Hacker:any 
+3.Victim: cm and cm 2 
+4.Port : 
+PORT     STATE SERVICE
+7/tcp    open  echo
+9/tcp    open  discard
+13/tcp   open  daytime
+19/tcp   open  chargen
+22/tcp   open  ssh
+23/tcp   open  telnet
+53/tcp   open  domain (DNS)
+79/tcp   open  finger
+80/tcp   open  http
+443/tcp  open  https
+1720/tcp open  h323q931
+2000/tcp open  cisco-sccp
+2002/tcp open  globe
+4002/tcp open  mlchat-proxy
+5060/tcp open  sip
+5061/tcp open  sip-tls
+6002/tcp open  X11:2
+9002/tcp open  dynamid
+
+Code:
+ex.1 Create a FirewallPolicy to meet this condition:
+cm will only allow http. and ssh = 2lines
+cm2 will allow  ping,dns to be open. 2lines
+
+
+@cucm:
+config t
+no access-list 100
+access-list 100 permit tcp any host cm eq 2000
+access-list 100 permit tcp any host cm eq 80
+access-list 100 permit tcp any host cm eq 22
+access-list 100 permit icmp any host cm2 
+access-list 100 permit tcp any host cm2 eq 53
+access-list 100 permit udp any host cm2 eq 53
+int fa 0/0
+ ip access-group 100 in
+ do sh ip access-list 100
+
+Unlock
+config t
+int fa 0/0
+ no ip access-group 103 in
+
+Ex2:  As a Security Consultant:
+Create a cisco Firewall policy with condition
+cm will allow ping, ssh, dns,
+cm2 will allow http, https:
+
+
+config t
+no access-list 101
+access-list 101 permit tcp any host cm eq 53
+access-list 101 permit tcp any host cm eq 22
+access-list 101 permit icmp any host cm (dns)
+access-list 101 permit tcp any host cm2 eq 80
+access-list 101 permit tcp any host cm2 eq 443
+int fa 0/0
+ ip access-group 101 in
+ do sh ip access-list 101
+
+
+
+
+
+config t
+no access-list 101
+access-list 101 permit tcp any host cm eq 53
+access-list 101 permit tcp any host cm eq 22
+access-list 101 permit icmp any host cm (dns)
+access-list 101 permit tcp any host cm2 eq 80
+access-list 101 permit tcp any host cm2 eq 443
+int fa 0/0
+ ip access-group 101 in
+ do sh ip access-list 101
+
+config t
+int fa 0/0
+ no ip access-group 102 in
+
+Ex4: Hacker = any, p1, p2, pc
+EditCisco:
+config t
+no ip host p1 10.32.100.102
+no ip host p2 10.32.100.101
+ip host p1 10.32.100.103
+ip host p2 10.32.100.104
+ip host c1 10.32.50.6
+ip host c2 10.32.50.8
+
+
+
+Create a firewall Policy to meet this condition:
+hacker: pc,1pc2,c1,c2
+- pc can http,https cm
+- p1 can ping can ping cm
+- p2 can sccp/cucm on cm
+- c1 can ping cm
+- c2 can http cm == 6 line
+
+access-list 103
+config t
+no access-list 103
+access-list 103 permit tcp host pc host cm eq 80
+access-list 103 permit tcp host pc host cm eq 443
+access-list 103 permit icmp host p1 host cm 
+access-list 103 permit tcp host p2 host cm eq 2000
+access-list 103 permit icmp host c1 host cm
+access-list 103 permit tcp host c2 host cm eq 80
+int fa 0/0
+ ip access-group 103 in
+ do sh ip access-list 103
+
+
+- pc can telnet,ssh cm
+- p1 can sccp/cucm on cm- 
+- p2 can ping cm
+- c1 can http cm
+- c2 can ping cm == Use, acl 105, with 6 line
+
+
+config t
+no access-list 104
+access-list 104 permit tcp host pc host cm eq 22
+access-list 104 permit tcp host pc host cm eq 23
+access-list 104 permit icmp host p2 host cm 
+access-list 104 permit tcp host p1 host cm eq 2000
+access-list 104 permit icmp host c2 host cm
+access-list 104 permit tcp host c1 host cm eq 80
+int fa 0/0
+ ip access-group 104 in
+ do sh ip access-list 104
+
+
+Task7: HOW TO MASTER THE 5 LABS IN EXAM
+ExamlabQuestion:
+1.dhcp question
+2, acl access list 
+3. ssh
+4 NTP
+5 NAT
+lab1: dhcpServer:
+config t
+int gi 2
+ip add 192.168.102.5 255.255.255.0
+no shut 
+config t
+int gi 3
+ip add 10.20.30.1 255.255.255.0
+no shut
+do copy run start (save)
+
+ExamlabQuestion
+LAB1
+Create a dhcp pool named BLDGDHCP
+With 10.20.30.0/24 as pool, and domain name of ccnaexam.com, dns server of 8.8.8.8 do not give, 1st 50 ip
+config t
+ip dhcp excluded-add 10.20.30.1 10.20.30.49
+ip dhcp pool BLDGDHCP
+network 10.20.30.0 255.255.255.0
+default-router 10.20.30.1
+domain-name ccnaexam.com
+dns-server 8.8.8.8
+option 150 ip 1.1.1.1
+
+LAB2: Enable SSH encryption on cisco:
+config t
+ip domain-name ccnaexam.com
+username boss privilage 15 secret pass
+crypto key generate rsa 
+ip ssh version 2
+
+
+LAB3: Network Time Protocol or NTP
+NTP Synchronizes time will all Cisco Devices
+Step : internet Connection
+config t
+int gi 1
+ip add dhcp
+no shut
+do ping 8.8.8.8
+
+
+ip domain-lookup 
+ip name-server 8.8.8.8
+do ping time.google.com
+ntp server time.google.com
+
+
+Lab4: danger lab: most important/lab hardest lab
+Network Address Translation
+3 steps to NAT:
+bldg1: 10.20.30.50 192.168.108.69 
+bldg1: 10.20.30.51 192.168.108.88
+NATinterface:
+gi1 = outsite/internetfacing
+gi3 = inside/NatInside
+
+config t
+access-list 8 permit 10.20.30.0 0.0.0.255
+int gi 1
+ip nat OUTSIDE
+int gi 3
+ip nat INSIDE
+!
+ip nat inside source static 10.20.30.50 192.168.108.69
+ip nat inside source static 10.20.30.51 192.168.108.88
+ip nat inside source list 8 int gi 1 overload
+
+
+
+
+
+
+erase start-config
+
+
+
+50:D4:F7:6D:CB:96
+john-01.cap
+
+Csico4321
+rommon> 
+rommon> 
+rommon> 
+confreg 0x2142
+i
+boot
+^c
+router>enable
+route# copy startup-config running-config
+Edge#
+    config-register 0x2102
+    enable secret fckuppldt
+    do wr
+
+
+Task 5 Mastering STP
+Question 1: Pano malman Mayaman ang switch ninyo
+Task 6 How to Get fired and w/out seperationpay and never re-hired
+
+baba:
+config t
+no spanning-tree vlan 1
+
+TAAS:
+config t
+no spanning-tree vlan 1
+
+
+
+config t
+spanning-tree vlan 1
+
+
+TASK 7: SWITCH FUNDAMENTALS:
+SKILL1: Prevent Destroyed Switch.
+show power inline : wag sagarin ang watts to 80%
+
+
+Task 8: Cisco STP Port States
+blk --
+lis -- 15s
+lrn -- 15s
+fwd -- 
+       30s
+
+Task9: HOW TO KNOW IF BOBO ANG NETWORK ENGINEER NIYO
+
+wireshark:
+root identifier 32768 - unprotected
+                24768 - by the book 
+                0.1 - professional seryoso masyado/playsafe
+TASK10:How to changess Access to Trunk Ports:
+TAAS?BABA:
+config t
+Int Range fa0/10-12
+ switchport trunk Encap Dot1Q
+ switchport mode trunk
+ do sh int trunk
+
+ do sh int trunk ( display the port active)
+ 
+
+BPO/USA Trunk:
+d1:
+config t
+int range e0/0-3,e1/2-3
+switchport trunk Encap Dot1Q
+switchport mode trunk
+end
+
+d2:
+config t
+int range e0/0-3,e1/2-3
+switchport trunk Encap Dot1Q
+switchport mode trunk
+end
+
+a1:
+config t
+int range e0/1-3,e1/0
+switchport trunk Encap Dot1Q
+switchport mode trunk
+end
+
+a2:
+config t
+int range e0/0-3
+switchport trunk Encap Dot1Q
+switchport mode trunk
+end
+
+
+Task12:802.1w: Rstp vs 802.1dSTP
+802.1d: blk,lis,lrn,fwd = 30s
+Darna Protect the switch with love, slowly!
+
+
+802.1w " RSTP: Discarding,lis, Rx/Tx
+Brutally love, kill quickly, if abusado, no mercy
+
+config t
+spanning-tree Mode Rapid-pvst
+do sh spanning-tree vlan 1
+configure 802.1w/RapidSTP:
+
+TAAS: RootBridge
+config t
+spanning-tree Mode Rapid-pvst
+spanning-tree BackBoneFast
+spanning-tree portfast bpduguard default
+Int Range fa0/1-8
+   spanning-tree Portfast
+@BABA:
+config t
+spanning-tree Mode Rapid-pvst
+spanning-tree UplinkFast
+spanning-tree portfast bpduguard default
+Int Range fa0/1-8
+  spanning-tree Portfast
+end
+
+
+
+config t
+Int Range fa0/3,fa0/7
+shut
+no shut
+do sh int status err-disable
+
+08:17:35:0f:d0:00
+
+1 DTP
+2 ROOTBRIDGE
+3.
+
+Task12: HOW TO PROTECT CISCO FROM LINUX ATTACK
+configure cisco port security on all the access port connect to employee
+
+
+config t
+Int fa0/7
+switchport mode access
+switchport port-security
+switchport port-security mac-address Sticky
+switchport port-security maximum 1
+switchport port-security violation shutdown
+Int fa0/8
+switchport mode access
+switchport port-security
+switchport port-security mac-address Sticky
+switchport port-security maximum 1
+switchport port-security violation shutdown
+
+
+TASK13: Multiple instance STP:
+step1: sync all Vlans with VTP:vlanTrunkingProtocol:
+TAAS/BABA:
+config t
+vtp domain ccna
+vtp password pass
+vtp mode server
+vtp version 2
+exit
+
+step2: 
+create vlans:
+TAAS:
+config t
+vlan 0-3
+exit
+vlan 21-29
+exit
+vlan 31-39
+exit
+BABA: sh vlan brief:
+@ENABLE SUPERMAN: 802.1S
+cpu1: vlan 11-19
+cpu2: vlan 21-29
+cpu3: vlan 31-39
+@TAAs/BABA:
+CONFIG T
+spanning-tree mode Mst
+spanning-tree mst configuration
+ name supermanstp
+ revision 1
+   Instance 1 vlan 11-19
+   Instance 2 vlan 21-29
+   Instance 3 vlan 31-39
+exit
+sh spanning-tree mst configuration 
+
+TASK14: MAKE YOUR OWN SUPERMAN BOSSING:
+
+
+@Taas: Make Taas RootBridge again:
+config t
+spanning-tree mst 0 root primary
+spanning-tree mst 1 root primary
+spanning-tree mst 2 root Secondary
+spanning-tree mst 3 root Secondary
+@baba
+config t
+spanning-tree mst 0 root Secondary
+spanning-tree mst 1 root Secondary
+spanning-tree mst 2 root primary
+spanning-tree mst 3 root primary
+
+
+config t
+vlan 11-19
+exit
+vlan 21-29
+exit
+vlan 31-39
+exit
+
+TASK14: Ckassic Rish Kid Problem.
+GLBP = all cisco router
+NSRP = all cisco switch
+VRRp = any brand
+
+config t
+Track 1 Int gi 0/1 line-protocol
+Int vlan 1
+standby 1 ip 10.12.1.6
+standby 1 preempt
+standby 1 Priority 150
+standby 1 Track 1 decrement 60
+
+@BABA
+config t
+Int vlan 1
+standby 1 ip 10.12.1.6
+standby 1 preempt
+standby 1 Priority 100
+do sh standby
+
+
+Task 17: ikaw ba ay tunay na lalake?
+
+what is this______technique
+
+fusion
+
+TASK17: Port-Aggregation/Etherchannel:
+LACP:LINK AGGREGATION CONTROL PROTOCOL = ieee
+Combinding Two/More Layer 2 links AS ONE! Unite/UNITY
+@taas/BABA:
+config t
+Int Range fa0/9-12
+ channel-group 1 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po1 | inc BW
+
+
+
+config t
+Int Range fa0/9-12
+ channel-group 1 mode active
+ channel-protocol Lacp
+Realworld/BPO Setup:
+D1:
+config t
+Int Range e0/1-2
+ channel-group 1 mode active
+ channel-protocol Lacp
+Int Range e0/2-3
+ channel-group 2 mode active
+ channel-protocol Lacp
+Int Range e1/2-3
+ channel-group 3 mode active
+ channel-protocol Lacp
+end
+
+D2:
+config t
+Int Range e0/1-2
+ channel-group 4 mode active
+ channel-protocol Lacp
+Int Range e0/3,e0/0
+ channel-group 5 mode active
+ channel-protocol Lacp
+Int Range e1/2-3
+ channel-group 3 mode active
+ channel-protocol Lacp
+end
+
+A1:
+config t
+Int Range e0/1-2
+ channel-group 1 mode active
+ channel-protocol Lacp
+Int Range e0/3,e1/0
+ channel-group 4 mode active
+ channel-protocol Lacp
+
+A2:
+config t
+Int Range e0/1-2
+ channel-group 4 mode active
+ channel-protocol Lacp
+Int Range e0/0,e0/3 
+ channel-group 5 mode active
+ channel-protocol Lacp
+
+Task19: you may be fired in the nect 4/5 years if you dont changes.
+if you dont change. AI
+Cisco Docker Container: DEVOPS
+
+
+
+TASK 20: RESTFUL API CONFIGURATION USING POSTMAN
+api = application programming interface waiter
+
+config t
+ip http secure-server
+ip http authentication local
+restconf
+netconf-yang
+end
+
+
+TASK21: how to retain all the learned skills:
+1. drugs: lios mane supplement
+2. tropa: 
+GT: greaterthan: mentor:
+EQ: Equallthan 
+LT: lessthan: apprentice/mentor
+3.1250Q:
+
+
+
+
+
+
+
+
+
+
