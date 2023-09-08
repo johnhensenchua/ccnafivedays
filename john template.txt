@@ -1,4 +1,4 @@
-ctrl+c = every create.
+shctrl+c = every create.
 
 10.m.1.10
 10.m.1.4m
@@ -486,17 +486,75 @@ ip nat inside source list 8 int gi 1 overload
 
 
 
+erase start-config
 
 
 
+50:D4:F7:6D:CB:96
+john-01.cap
+
+Csico4321
+rommon> 
+rommon> 
+rommon> 
+confreg 0x2142
+i
+boot
+^c
+router>enable
+route# copy startup-config running-config
+Edge#
+    config-register 0x2102
+    enable secret fckuppldt
+    do wr
+
+
+Task 5 Mastering STP
+Question 1: Pano malman Mayaman ang switch ninyo
+Task 6 How to Get fired and w/out seperationpay and never re-hired
+
+baba:
+config t
+no spanning-tree vlan 1
+
+TAAS:
+config t
+no spanning-tree vlan 1
 
 
 
+config t
+spanning-tree vlan 1
 
 
+TASK 7: SWITCH FUNDAMENTALS:
+SKILL1: Prevent Destroyed Switch.
+show power inline : wag sagarin ang watts to 80%
 
 
+Task 8: Cisco STP Port States
+blk --
+lis -- 15s
+lrn -- 15s
+fwd -- 
+       30s
 
+Task9: HOW TO KNOW IF BOBO ANG NETWORK ENGINEER NIYO
+
+wireshark:
+root identifier 32768 - unprotected
+                24768 - by the book 
+                0.1 - professional seryoso masyado/playsafe
+TASK10:How to changess Access to Trunk Ports:
+TAAS?BABA:
+config t
+Int Range fa0/10-12
+ switchport trunk Encap Dot1Q
+ switchport mode trunk
+ do sh int trunk
+
+ do sh int trunk ( display the port active)
+ 
 
 
 

@@ -1,0 +1,33 @@
+config t
+no access-list 102
+access-list 102 permit tcp any host cm eq 80
+access-list 102 permit tcp any host cm eq 443
+access-list 102 permit tcp any host cm eq 2000
+access-list 102 permit icmp any host cm2 
+access-list 102 permit tcp any host cm2 eq 22
+access-list 102 permit tcp any host cm2 eq 23
+access-list 102 permit tcp any host cm2 eq 5060
+int fa 0/0
+ ip access-group 102 in
+ do sh ip access-list 102
+
+
+PORT     STATE SERVICE
+7/tcp    open  echo
+9/tcp    open  discard
+13/tcp   open  daytime
+19/tcp   open  chargen
+22/tcp   open  ssh
+23/tcp   open  telnet
+53/tcp   open  domain (DNS)
+79/tcp   open  finger
+80/tcp   open  http
+443/tcp  open  https
+1720/tcp open  h323q931
+2000/tcp open  cisco-sccp
+2002/tcp open  globe
+4002/tcp open  mlchat-proxy
+5060/tcp open  sip
+5061/tcp open  sip-tls
+6002/tcp open  X11:2
+9002/tcp open  dynamid
